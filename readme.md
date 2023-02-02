@@ -82,14 +82,7 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 4) Run notebook.
  
 # Takeaways and Conclusions
-* Square feet of home and tax value have a positive correlation
-    * The influence appears moderate
-* bathrooms and bedrooms have a positive correlation
-    * correlation appears weak
-* Polynomial model is the most accurate but is still not very reliable
-* not enough features to create an accurate model that predicts tax_value
+
  
 # Recommendations
-* add another feature like block location to come up with a better model
-* Use polynomial regression to make predictions
-* Consider finding another model or gathering more data
+
