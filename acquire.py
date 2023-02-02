@@ -13,9 +13,11 @@ def get_wine():
              'volatile acidity': 'volatile_acidity',
              'citric acid': 'citric_acid',
              'residual sugar': 'residual_sugar',
-             'free sulfur dioxide': 'free_sulfur_dioxide',
-             'total sulfur dioxide': 'total_sulfur_dioxide'})
+             'free sulfur dioxide': 'free_sulphur_dioxide',
+             'total sulfur dioxide': 'total_sulphur_dioxide'})
     
+    df = df.drop(columns= 'Unnamed: 0')
+                 
     return df
 
 #-----------------------------------------------------------
