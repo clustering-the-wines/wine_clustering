@@ -2,12 +2,14 @@
  
 # Project Description
 
-A small region in northern Portugal is known for its production of various types of wine. Wines produced in this region go through an extensive testing process where different chemical attributes are measured and recorded. These measurements were recorded and placed in a dataset. This dataset was analyzed to come up with the features that would be the best predictors of wine quality. Wine quality was measured on a scale of 3-9 with 3 being low quality and 9 being high quality. After most important features were identified, features were applied to a machine learning algorithm to predict wine quality.
+A small region in northern Portugal is known for its production of various types of wine. Wines produced in this region go through an extensive testing process where different chemical attributes are measured and recorded. These measurements were recorded and placed in a dataset. This dataset was analyzed to come up with the features that would be the best predictors of wine quality. Wine quality was measured on a scale of 0-10 with 0 being low quality and 10 being high quality. There were no actual valuse of 0-2 and 10, and so we ended up using 3-9. After most important features were identified, features were applied to a machine learning algorithm to predict the wine quality.
 
 # Project Goal
  
 * Discover features that have the strongest influence on wine quality.
+
 * Use features to develop a machine learning model to predict wine quality.
+
 * This information can be used to identify features that can be focused on in the wine making process to ensure highest wine quality.
  
 # Initial Thoughts
@@ -18,8 +20,10 @@ My initial hypothesis is that the sugar level influences wine quality the most a
  
 * Aquire data from data.world
  
-* Prepare data
-   * Create Engineered columns from existing data
+* Prepare data:
+
+   * Create Engineered columns from existing data:
+
        * fixed_acidity
        * volatile_acidity
        * citric_acid
@@ -35,7 +39,9 @@ My initial hypothesis is that the sugar level influences wine quality the most a
        * wine_type
  
 * Explore data in search of drivers of tax value
-   * Answer the following initial questions
+
+   * Answer the following initial questions:
+   
       * How many of wines of each quality are there?
       * Is there a relationship between fixed and volatile acidity?
       * Is there a relationship between residual sugar and wine quality?
@@ -45,9 +51,10 @@ My initial hypothesis is that the sugar level influences wine quality the most a
       * Is there a relationshp between sulphates and sulphur dioxide?
       
 * Develop a clustering Model based on fixed acidity and volatile acidity
-      * developed clustering model based on free sulphur dioxide and total sulphur dioxide
+* Develop clustering model based on free sulphur dioxide and total sulphur dioxide
   
-* Use features identified in explore build predictive models of different types
+* Use features identified in explore build predictive models of different types:
+
    * Evaluate models on train and validate data
    * Select the best model based on accuracy
    * Evaluate the best model on test data
@@ -76,13 +83,35 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 
 
 # Steps to Reproduce
+
 1) Clone this repo.
-2) Acquire the data from sql database
-3) Put the data in the file containing the cloned repo.
-4) Run notebook.
+2) Acquire the csv files from data.world
+3) Combine both csvs into one DataFrame with Pandas, creating the wine_type column
+4) Save the new DataFrame as 'wine_quality.csv'
+5) Run notebook.
  
 # Takeaways and Conclusions
 
+- Fixed acidity and volatile acidity have a relationship with each other.
+    
+- Free sulphur dioxide and total sulphur dioxide have a relatioship with each other, while both of those features are also negatively correlated to the sulphates feature.
+    
+- One of the biggest, if not the biggest factors in wine quality, is the residual sugar level.
+
+- citric acid and pH levels have a medium-low negative correlation with each other; meaning that, as the citric acid levels rise, the pH levels lower.
+    
+- Density does have a significant relationship with wine quality.
+
+- Fixed and Volatile Acidity are correlated enough to attempt to cluster them together into a new feature.
+
+- Free and total sulphur dioxides are both highly correlated with each other, and will be clustered together to create a new feature.
+
+- The classification model ended up beating our baseline by roughly 15% using our test dataset.
  
 # Recommendations
 
+- One way to potentially increase wine quality is to reduce residual sugar levels.
+
+- On average, the better rated wines tend to have lower density levels, so finding a way to lower that could potentially raise the quality.
+
+- On average, the best quality wines tended to be in the middle when it comes to both citric acids levels and pH, and since these are negatively correlated to each other, it should be possible to balance those two features to help improve wine quality.
