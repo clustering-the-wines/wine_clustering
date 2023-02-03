@@ -42,14 +42,13 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 
    * Answer the following initial questions:
    
-      * How many of wines of each quality are there?
-      * Is there a relationship between fixed and volatile acidity?
-      * Is there a relationship between residual sugar and wine quality?
-      * Does pH and alcohol content have a relationship?
-      * Does sulphates influence wine quality?
-      * Does wine type influence wine quality?
-      * Is there a relationshp between sulphates and sulphur dioxide?
-      
+       * How many wines of each quality are there?
+       * Do fixed acidity and volatile acidity correlate?
+       * Does residual sugar and wine quality have a correlation?
+       * Does citric acid and pH correlate?
+       * Do sulphates vs free and total sulphur dioxides have a relationhip?
+       * Does density vs quality have a relationship?
+
 * Develop a clustering Model based on fixed acidity and volatile acidity
 * Develop clustering model based on free sulphur dioxide and total sulphur dioxide
   
@@ -94,7 +93,7 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 
 - Fixed acidity and volatile acidity have a relationship with each other.
     
-- Free sulphur dioxide and total sulphur dioxide have a relatioship with each other, while both of those features are also negatively correlated to the sulphates feature.
+- Free sulphur dioxide and total sulphur dioxide are negatively correlated to the sulphates feature.
     
 - One of the biggest, if not the biggest factors in wine quality, is the residual sugar level.
 
@@ -104,7 +103,7 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 
 - Fixed and Volatile Acidity are correlated enough to attempt to cluster them together into a new feature.
 
-- Free and total sulphur dioxides are both highly correlated with each other, and will be clustered together to create a new feature.
+- Free and total sulphur dioxides will be clustered together to create a new feature.
 
 - The classification model ended up beating our baseline by roughly 15% using our test dataset.
  
@@ -114,4 +113,4 @@ My initial hypothesis is that the sugar level influences wine quality the most a
 
 - On average, the better rated wines tend to have lower density levels, so finding a way to lower that could potentially raise the quality.
 
-- On average, the best quality wines tended to be in the middle when it comes to both citric acids levels and pH, and since these are negatively correlated to each other, it should be possible to balance those two features to help improve wine quality.
+- On average, the best quality wines tended to be in the middle when it comes to both citric acids levels and pH, and since these are negatively correlated to each other, we can lower pH by increasing citric acid.
