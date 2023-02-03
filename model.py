@@ -193,3 +193,103 @@ def knn_gen(X_train, y_train, X_validate, y_validate):
     return df
 
 #---------------------------------------------------------
+
+def cluster_fit_acidity(df):
+    
+    kmeans = KMeans(n_clusters=3, random_state=seed)
+    
+    kmeans.fit(df[['fixed_acidity', 'volatile_acidity']])
+    df['scaled_clusters'] = kmeans.predict(df[['fixed_acidity', 'volatile_acidity']])
+
+    sns.relplot(data=df, x='fixed_acidity', y='volatile_acidity', hue='scaled_clusters')
+    plt.show()
+    
+    df = df.rename(columns= {'scaled_clusters': 'acidity_areas'})
+    df = df.drop(columns=['fixed_acidity', 'volatile_acidity'])
+    
+    return df, kmeans
+    
+#---------------------------------------------------------
+
+def cluster_val_test_acidity(df, model):
+    
+    df['scaled_clusters'] = model.predict(df[['fixed_acidity', 'volatile_acidity']])
+
+    df = df.rename(columns= {'scaled_clusters': 'acidity_areas'})
+
+    df = df.drop(columns=['fixed_acidity', 'volatile_acidity'])
+    
+    return df
+
+#---------------------------------------------------------
+
+def cluster_fit_sulphurs(df):
+    
+    kmeans = KMeans(n_clusters=3, random_state=seed)
+    
+    kmeans.fit(df[['free_sulphur_dioxide', 'total_sulphur_dioxide']])
+    df['scaled_clusters'] = kmeans.predict(df[['free_sulphur_dioxide', 'total_sulphur_dioxide']])
+
+    sns.relplot(data=df, x='free_sulphur_dioxide', y='total_sulphur_dioxide', hue='scaled_clusters')
+    plt.show()
+    
+    df = df.rename(columns= {'scaled_clusters': 'dioxide_clusters'})
+    df = df.drop(columns=['free_sulphur_dioxide', 'total_sulphur_dioxide'])
+    
+    return df, kmeans
+
+#---------------------------------------------------------
+
+def cluster_val_test_sulphurs(df, model):
+    
+    df['scaled_clusters'] = model.predict(df[['free_sulphur_dioxide', 'total_sulphur_dioxide']])
+
+    df = df.rename(columns= {'scaled_clusters': 'dioxide_clusters'})
+
+    df = df.drop(columns=['free_sulphur_dioxide', 'total_sulphur_dioxide'])
+    
+    return df
+
+#---------------------------------------------------------
+
+def rf_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
+    
+    rf = RandomForestClassifier(max_depth=5, min_samples_leaf=5, n_estimators=200, random_state=42)
+    rf = rf.fit(X_train_scaled, y_train)
+    
+    print(f'Train accuracy is: {rf.score(X_train_scaled, y_train):.2f}')
+    
+    print('-----\n')
+
+    print(f'Validate accuracy is: {rf.score(X_validate_scaled, y_validate):.2f}')
+    
+#---------------------------------------------------------
+
+def dectree_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
+    
+    dectree = DecisionTreeClassifier(max_depth=4, random_state=42)
+    dectree = dectree.fit(X_train_scaled, y_train)
+    
+    print(f'Train accuracy is: {dectree.score(X_train_scaled, y_train):.2f}')
+    
+    print('-----\n')
+    
+    print(f'Validate accuracy is: {dectree.score(X_validate_scaled, y_validate):.2f}')
+    
+#---------------------------------------------------------
+
+def dectree_no_clusters(X_train_scaled, y_train, X_validate_scaled, y_validate):
+    
+    dectree_df = X_train_scaled.drop(columns=['acidity_areas_1', 'acidity_areas_2', 'dioxide_clusters_1', 'dioxide_clusters_2'])
+    dectree_df1 = X_validate_scaled.drop(columns=['acidity_areas_1', 'acidity_areas_2', 'dioxide_clusters_1', 'dioxide_clusters_2'])
+    
+    dectree = DecisionTreeClassifier(max_depth=4, random_state=42)
+    dectree = dectree.fit(dectree_df, y_train)
+    
+    print(f'Train accuracy is: {dectree.score(dectree_df, y_train):.2f}')
+    
+    print('-----\n')
+
+    print(f'Validate accuracy is: {dectree.score(dectree_df1, y_validate):.2f}')
+    
+#---------------------------------------------------------
