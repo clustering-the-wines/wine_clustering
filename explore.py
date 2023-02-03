@@ -22,7 +22,8 @@ seed = 42
 
 def mannwhitney_report(group1, group2):
     '''
-    This function takes in two groups (columns), and will perform a mannwhitneyu test on them and print out the t-statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
+    This function takes in two groups (columns), and will perform a mannwhitneyu test on them and print out 
+    the test statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
     '''
     t, p = stats.mannwhitneyu(group1, group2)
 
@@ -38,7 +39,8 @@ def mannwhitney_report(group1, group2):
 
 def ind_ttest_report(group1, group2):
     '''
-    This function takes in two groups (columns), and will perform an independent t-test on them and print out the t-statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
+    This function takes in two groups (columns), and will perform an independent t-test on them and print out 
+    the t-statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
     '''
     t, p = stats.ttest_ind(group1, group2, equal_var=False)
 
@@ -54,7 +56,8 @@ def ind_ttest_report(group1, group2):
 
 def pearsonr_report(group1, group2):
     '''
-    This function takes in two groups (columns), and will perform a pearson r test on them and print out the t-statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
+    This function takes in two groups (columns), and will perform a pearsonr test on them and print out 
+    the test statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
     '''
     t, p = stats.pearsonr(group1, group2)
 
@@ -70,7 +73,8 @@ def pearsonr_report(group1, group2):
 
 def spearmanr_report(group1, group2):
     '''
-    This function takes in two groups (columns), and will perform a spearman r test on them and print out the t-statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
+    This function takes in two groups (columns), and will perform a spearman r test on them and print out 
+    the test statistic and p-value, as well as determine if the p-value is lower than a predetermined (.05) alpha
     '''
     t, p = stats.spearmanr(group1, group2)
 

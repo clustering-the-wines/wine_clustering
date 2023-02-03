@@ -29,7 +29,9 @@ seed = 42
 #---------------------------------------------------------
 
 def inertial_dampening(df, cols, num=11):
-    
+    '''
+    This function will take in a dataframe, a list of columns as well as a number of clusters to create, fit, and append the inertia from the clustering model into a list, convert it to a dataframe, and then create a line plot of each inertia to help determine the best number of clusters.
+    '''
     inertia = []
     seed = 42
 
@@ -52,12 +54,23 @@ def inertial_dampening(df, cols, num=11):
     plt.ylabel('Inertia')
     plt.title('Change in inertia as number of clusters increase')
     plt.show()
-    
+   
+#---------------------------------------------------------
+
+def subset_df(df, stratify=None, seed=42):
+    '''
+    This function takes in a DataFrame and splits it into train, validate, test subsets for our modeling phase. Does not take in a stratify option.
+    '''
+    train, val_test = train_test_split(df, train_size=.6, random_state=seed)
+    validate, test = train_test_split(val_test, train_size=.5, random_state=seed)
+        
+    return train, validate, test
+
 #---------------------------------------------------------
 
 def xy_subsets(train, validate, test, target):
     '''
-    This function will separate each of my subsets for the dataset (train, validate, and test) and split them further into my x and y subsets for modeling. When running this, be sure to assign each of the six variables in the proper order, otherwise it will almost certainly mess up. (X_train, y_train, X_validate, y_validate, X_test, y_test).
+    This function will separate each of my subsets for the dataset (train, validate, and test) and split them further into my x and y subsets for modeling. When running this, be sure to assign each of the six variables in the proper order.
     '''  
     seed = 42
     
@@ -71,17 +84,6 @@ def xy_subsets(train, validate, test, target):
     y_test = test[target]
     
     return X_train, y_train, X_validate, y_validate, X_test, y_test
-
-#---------------------------------------------------------
-
-def subset_df(df, stratify=None, seed=42):
-    '''
-    This function takes in a DataFrame and splits it into train, validate, test subsets for our modeling phase. Does not take in a stratify option.
-    '''
-    train, val_test = train_test_split(df, train_size=.6, random_state=seed)
-    validate, test = train_test_split(val_test, train_size=.5, random_state=seed)
-        
-    return train, validate, test
 
 #---------------------------------------------------------
 
@@ -100,7 +102,7 @@ def make_baseline(df, baseline, col):
     
 #---------------------------------------------------------
 
-def rf_gen(df, col):
+def rf_gen(X_train, y_train, X_validate, y_validate):
     
     metrics = []
     
@@ -108,15 +110,9 @@ def rf_gen(df, col):
 
     for i in range(1, 20):
         '''
-        This function will create a dataframe of Random Forest models of varying max_depths and compare the differences from the train and validate sets and return the dataframe. It requires the variable names to be: X_train, y_train, X_validate, and y_validate.
+        This function will create a dataframe of Random Forest models of varying max_depths and 
+        compare the differences from the train and validate sets and return the dataframe. 
         '''
-        train, validate, test = subset_df(df, stratify=col)
-        X_train, y_train, X_validate, y_validate, X_test, y_test = xy_subsets(train, validate, test, col)
-        
-        X_train = pd.get_dummies(X_train, columns=['wine_type'], drop_first=True)
-        X_validate = pd.get_dummies(X_validate, columns=['wine_type'], drop_first=True)
-        X_test = pd.get_dummies(X_test, columns=['wine_type'], drop_first=True)
-        
         rf = RandomForestClassifier(max_depth=i, min_samples_leaf=3, n_estimators=200, random_state=42)
         rf = rf.fit(X_train, y_train)
         
@@ -137,7 +133,7 @@ def rf_gen(df, col):
 
 #---------------------------------------------------------
 
-def dectree_gen(df, col):
+def dectree_gen(X_train, y_train, X_validate, y_validate):
     
     metrics = []
     
@@ -145,15 +141,9 @@ def dectree_gen(df, col):
 
     for i in range(1, 20):
         '''
-        This function will create a dataframe of Decision Tree models of varying max_depths and compare the differences from the train and validate sets and return the dataframe. It requires the variable names to be: X_train, y_train, X_validate, and y_validate.
+        This function will create a dataframe of Decision Tree models of varying max_depths and 
+        compare the differences from the train and validate sets and return the dataframe. 
         '''
-        train, validate, test = subset_df(df, stratify=col)   
-        X_train, y_train, X_validate, y_validate, X_test, y_test = xy_subsets(train, validate, test, col)
-        
-        X_train = pd.get_dummies(X_train, columns=['wine_type'], drop_first=True)
-        X_validate = pd.get_dummies(X_validate, columns=['wine_type'], drop_first=True)
-        X_test = pd.get_dummies(X_test, columns=['wine_type'], drop_first=True)
-        
         dectree = DecisionTreeClassifier(max_depth=i, random_state=42)
         dectree = dectree.fit(X_train, y_train)
 
@@ -171,10 +161,9 @@ def dectree_gen(df, col):
     df["difference"] = df.train_accuracy - df.validate_accuracy
     
     return df
-
 #---------------------------------------------------------
 
-def knn_gen(df, col):
+def knn_gen(X_train, y_train, X_validate, y_validate):
     
     metrics = []
 
@@ -182,15 +171,9 @@ def knn_gen(df, col):
     
     for i in range(1, 21):
         '''
-        This function will create a dataframe of KNN models of varying n_neighbors and compare the differences from the train and validate sets and return the dataframe. It requires the variable names to be: X_train, y_train, X_validate, and y_validate.
+        This function will create a dataframe of KNN models of varying n_neighbors and compare the differences from 
+        the train and validate sets and return the dataframe.
         '''
-        train, validate, test = subset_df(df, stratify=col)   
-        X_train, y_train, X_validate, y_validate, X_test, y_test = xy_subsets(train, validate, test, col)
-        
-        X_train = pd.get_dummies(X_train, columns=['wine_type'], drop_first=True)
-        X_validate = pd.get_dummies(X_validate, columns=['wine_type'], drop_first=True)
-        X_test = pd.get_dummies(X_test, columns=['wine_type'], drop_first=True)
-        
         knn = KNeighborsClassifier(n_neighbors=i, weights='uniform')
         knn = knn.fit(X_train, y_train)
 
