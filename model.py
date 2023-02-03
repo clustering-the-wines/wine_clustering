@@ -91,7 +91,6 @@ def make_baseline(df, baseline, col):
     '''
     This function is used to create a column within the dataframe to make a baseline column, and then calculate the baseline accuracy. Needs to be optimized more, but functions as is currently. Make sure to use the word 'baseline' when calling function.
     '''
-    
     seed = 42
     
     df[baseline] = df[col].value_counts().idxmax()    
@@ -103,16 +102,16 @@ def make_baseline(df, baseline, col):
 #---------------------------------------------------------
 
 def rf_gen(X_train, y_train, X_validate, y_validate):
-    
+    '''
+    This function will create a dataframe of Random Forest models of varying max_depths and 
+    compare the differences from the train and validate sets and return the dataframe.
+    '''
     metrics = []
     
     seed = 42
 
     for i in range(1, 20):
-        '''
-        This function will create a dataframe of Random Forest models of varying max_depths and 
-        compare the differences from the train and validate sets and return the dataframe. 
-        '''
+        
         rf = RandomForestClassifier(max_depth=i, min_samples_leaf=3, n_estimators=200, random_state=42)
         rf = rf.fit(X_train, y_train)
         
@@ -134,16 +133,16 @@ def rf_gen(X_train, y_train, X_validate, y_validate):
 #---------------------------------------------------------
 
 def dectree_gen(X_train, y_train, X_validate, y_validate):
-    
+    '''
+    This function will create a dataframe of Decision Tree models of varying max_depths and 
+    compare the differences from the train and validate sets and return the dataframe. 
+    '''
     metrics = []
     
     seed = 42
 
     for i in range(1, 20):
-        '''
-        This function will create a dataframe of Decision Tree models of varying max_depths and 
-        compare the differences from the train and validate sets and return the dataframe. 
-        '''
+        
         dectree = DecisionTreeClassifier(max_depth=i, random_state=42)
         dectree = dectree.fit(X_train, y_train)
 
@@ -164,16 +163,16 @@ def dectree_gen(X_train, y_train, X_validate, y_validate):
 #---------------------------------------------------------
 
 def knn_gen(X_train, y_train, X_validate, y_validate):
-    
+    '''
+    This function will create a dataframe of KNN models of varying n_neighbors and compare the differences from 
+    the train and validate sets and return the dataframe.
+    '''
     metrics = []
 
     seed = 42
     
     for i in range(1, 21):
-        '''
-        This function will create a dataframe of KNN models of varying n_neighbors and compare the differences from 
-        the train and validate sets and return the dataframe.
-        '''
+        
         knn = KNeighborsClassifier(n_neighbors=i, weights='uniform')
         knn = knn.fit(X_train, y_train)
 
@@ -195,7 +194,9 @@ def knn_gen(X_train, y_train, X_validate, y_validate):
 #---------------------------------------------------------
 
 def cluster_fit_acidity(df):
-    
+    '''
+    This function takes in a dataframe, and creates and fits a clustering model on it, while adding that cluster to the dataframe and renaming the column and dropping the columns created to make the cluster.
+    '''
     kmeans = KMeans(n_clusters=3, random_state=seed)
     
     kmeans.fit(df[['fixed_acidity', 'volatile_acidity']])
@@ -212,7 +213,9 @@ def cluster_fit_acidity(df):
 #---------------------------------------------------------
 
 def cluster_val_test_acidity(df, model):
-    
+    '''
+    This function takes in a dataframe and a clustering model to predict off of the already fit model, and creates a column in the given dataframe, as well as renaming the column and dropping the two that the cluster were created from.
+    '''
     df['scaled_clusters'] = model.predict(df[['fixed_acidity', 'volatile_acidity']])
 
     df = df.rename(columns= {'scaled_clusters': 'acidity_areas'})
@@ -224,7 +227,9 @@ def cluster_val_test_acidity(df, model):
 #---------------------------------------------------------
 
 def cluster_fit_sulphurs(df):
-    
+    '''
+    This function will take in a dataframe and create and fit a clustering model, then predict, add those predictions to the given dataframe, and then alter the name and drop the columns used to create the dataframe.
+    '''
     kmeans = KMeans(n_clusters=3, random_state=seed)
     
     kmeans.fit(df[['free_sulphur_dioxide', 'total_sulphur_dioxide']])
@@ -241,7 +246,9 @@ def cluster_fit_sulphurs(df):
 #---------------------------------------------------------
 
 def cluster_val_test_sulphurs(df, model):
-    
+    '''
+    This function will take in a dataframe (either the X_validate or X_test) and a clustering model, and then predict and alter the dataframe so that the clusters are included as a new column, then rename it and remove the columns used to make the cluster.
+    '''
     df['scaled_clusters'] = model.predict(df[['free_sulphur_dioxide', 'total_sulphur_dioxide']])
 
     df = df.rename(columns= {'scaled_clusters': 'dioxide_clusters'})
@@ -253,7 +260,9 @@ def cluster_val_test_sulphurs(df, model):
 #---------------------------------------------------------
 
 def rf_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
-    
+    '''
+    This funtion will take in four dataframes, the X_train, y_train, X_validate, and y_validate, and create and fit a random forest model to predict the train and validate accuracy on said model.
+    '''
     rf = RandomForestClassifier(max_depth=5, min_samples_leaf=5, n_estimators=200, random_state=42)
     rf = rf.fit(X_train_scaled, y_train)
     
@@ -266,7 +275,9 @@ def rf_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
 #---------------------------------------------------------
 
 def dectree_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
-    
+    '''
+    This funtion will take in four dataframes, the X_train, y_train, X_validate, and y_validate, and create and fit a decision tree model to predict the train and validate accuracy on said model.
+    '''
     dectree = DecisionTreeClassifier(max_depth=4, random_state=42)
     dectree = dectree.fit(X_train_scaled, y_train)
     
@@ -279,7 +290,9 @@ def dectree_model(X_train_scaled, y_train, X_validate_scaled, y_validate):
 #---------------------------------------------------------
 
 def dectree_no_clusters(X_train_scaled, y_train, X_validate_scaled, y_validate):
-    
+    '''
+    This funtion will take in four dataframes, the X_train, y_train, X_validate, and y_validate, and create and fit a decision tree model, while also removing the cluster collumns, to predict the train and validate accuracy on said model.
+    '''
     dectree_df = X_train_scaled.drop(columns=['acidity_areas_1', 'acidity_areas_2', 'dioxide_clusters_1', 'dioxide_clusters_2'])
     dectree_df1 = X_validate_scaled.drop(columns=['acidity_areas_1', 'acidity_areas_2', 'dioxide_clusters_1', 'dioxide_clusters_2'])
     
