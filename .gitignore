@@ -3,3 +3,6 @@ env.py
 .ipynb_checkpoints/
 __pycache__
 *.csv
+shawns_workbook2.ipynb
+shawn_workbook.ipynb
+bill_workbook.ipynb
